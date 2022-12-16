@@ -45,7 +45,13 @@ print(setproctitle.getproctitle())
 """,
         args="-u",
     )
-    assert rv == sys.executable + " -u\n"
+
+    if sys.platform == "darwin" and sys.version_info >= (3, 11):
+        expected_executable = os.path.realpath(sys.executable)
+    else:
+        expected_executable = sys.executable
+
+    assert rv == expected_executable + " -u\n"
 
 
 def test_setproctitle():
